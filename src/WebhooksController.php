@@ -49,7 +49,7 @@ final class WebhooksController
             ],
             'Move along',
             'Hi there!',
-            'awaitingapproval',
+            'queued',
             null,
             $topicId,
             $id
