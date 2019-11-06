@@ -11,25 +11,25 @@ This is a demo application for the Clarabridge Engage API. You can use this to s
 
 Clone this repo:
 
-```bash
+```sh
 $ git clone https://github.com/engagor/engage-api-demo
 ```
 
 Change directory to the repository
 
-```bash
+```sh
 $ cd engage-api-demo
 ```
 
 Install composer dependencies
 
-```bash
+```sh
 $ composer install
 ```
 
 Run the built-in webserver
 
-```bash
+```sh
 $ php -S {your-local-ip-here}:8000 -t public/
 ```
 
@@ -40,7 +40,7 @@ You can now visit [localhost:8000](http://localhost:8000) in your browser to see
 
 Copy the `.env.dist` file to `.env`
 
-```bash
+```sh
 cp .env.dist .env
 ```
 
@@ -48,7 +48,7 @@ Find the `CLIENT_ID` and `CLIENT_SECRET` for your application in your [list of a
 
 Make your local webserver available to Engage (you'll need [localtunnel](https://localtunnel.me/))
 
-```bash
+```sh
 $ lt --port 8000 --subdomain {your-subdomain-here} --local-host {your-local-ip-here}
 ```
 
@@ -66,7 +66,7 @@ Make sure thet automation rule uses the `POST` method and has this body:
 
 Every time a private message enters the topic, you should see it entering the `logs.txt` file.
 
-```bash
+```sh
 $ tail -f logs.txt
 ```
 
