@@ -30,10 +30,37 @@ $ composer install
 Run the built-in webserver
 
 ```bash
-$ php -S localhost:8000 -t public
+$ php -S {your-local-ip-here}:8000 -t public/
 ```
 
 You can now visit [localhost:8000](http://localhost:8000) in your browser to see the result.
+
+
+## Integrate with Engage
+
+Make your local webserver available to Engage (you'll need [localtunnel](https://localtunnel.me/))
+
+```bash
+$ lt --port 8000 --subdomain {your-subdomain-here} --local-host {your-local-ip-here}
+```
+
+Now, in Engage, you can setup an [automation rule](https://help.engagor.com/customer/portal/articles/1628555#Post) that forwards incoming private messages to the url acquired by running the previous command, e.g.
+
+```
+https://{your-subdomain-here}.localtunnel.me/webhooks
+```
+
+Make sure thet automation rule uses the `POST` method and has this body:
+
+```
+[mention]
+```
+
+Every time a private message enters the topic, you should see it entering the `logs.txt` file.
+
+```bash
+$ tail -f logs.txt
+```
 
 
 ## Contributing

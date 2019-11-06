@@ -13,5 +13,6 @@ $container->set(Demo\TestController::class, function () {
 $app = Bridge::create($container);
 
 $app->get('/', [Demo\TestController::class, 'hello']);
+$app->post('/webhooks', [Demo\WebhooksController::class, 'webhooks']);
 
 $app->run();
