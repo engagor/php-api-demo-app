@@ -3,3 +3,5 @@
 /phpcs.xml
 /phpunit.xml
 /logs.txt
+/.env
+/token

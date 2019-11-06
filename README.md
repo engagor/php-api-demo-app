@@ -38,6 +38,14 @@ You can now visit [localhost:8000](http://localhost:8000) in your browser to see
 
 ## Integrate with Engage
 
+Copy the `.env.dist` file to `.env`
+
+```bash
+cp .env.dist .env
+```
+
+Find the `CLIENT_ID` and `CLIENT_SECRET` for your application in your [list of applications](https://developers.engagor.com/applications), and put them in the `.env` file.
+
 Make your local webserver available to Engage (you'll need [localtunnel](https://localtunnel.me/))
 
 ```bash
