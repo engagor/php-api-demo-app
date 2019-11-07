@@ -27,12 +27,6 @@ final class WebhooksController
     {
         $rawMention = $request->getBody()->getContents();
 
-        file_put_contents(
-            __DIR__ . '/../logs.txt',
-            $rawMention,
-            FILE_APPEND
-        );
-
         $mention = json_decode($rawMention, true);
         $topicId = $mention['topic']['id'];
         $id = $mention['id'];
