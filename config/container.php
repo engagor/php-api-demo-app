@@ -37,5 +37,10 @@ $container->set(Engagor\Client::class, function (Container $container) {
         $tokens
     );
 });
+$container->set(Demo\HsmSubscriptions::class, function () {
+    $file = __DIR__ . '/../subscriptions';
+
+    return new Demo\HsmSubscriptionsFile($file);
+});
 
 return $container;

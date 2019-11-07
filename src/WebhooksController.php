@@ -9,10 +9,12 @@ use Psr\Http\Message\ResponseInterface as Response;
 final class WebhooksController
 {
     private $client;
+    private $hsmSubscriptions;
 
-    public function __construct(Client $client)
+    public function __construct(Client $client, HsmSubscriptions $hsmSubscriptions)
     {
         $this->client = $client;
+        $this->hsmSubscriptions = $hsmSubscriptions;
     }
 
     public function webhooks(Request $request, Response $response)
@@ -29,11 +31,42 @@ final class WebhooksController
         $topicId = $mention['topic']['id'];
         $id = $mention['id'];
         $permalink = $mention['permalink'];
+        $messageContent = $mention['message']['content'];
         $messageType = $mention['message']['type'];
         $service = $mention['source']['service'];
         $accountId = preg_replace('/^.*messages\/(\d+)\/.*$/', '$1', $permalink);
         $profileId = preg_replace('/^.*twitter\.com\/(\d+)\/dm.*$/', '$1', $mention['source']['url']);
         $authorId = $mention['author']['id'];
+
+        $phoneNumber = preg_replace('/^.*?(\+?[\d\s\(\)\.\-\/]+).*?/', '$1', strip_tags($messageContent));
+        $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+        try {
+            $numberProto = $phoneUtil->parse($phoneNumber, "BE");
+            $phoneNumber = $phoneUtil->format($numberProto, \libphonenumber\PhoneNumberFormat::E164);
+        } catch (\libphonenumber\NumberParseException $e) {
+            $phoneNumber = '';
+        }
+
+        $containsYes = mb_stripos(strip_tags($messageContent), 'yes') !== false;
+
+        if ($this->hsmSubscriptions->contains($accountId, $service, $authorId)) {
+            return $response;
+        }
+
+        $replyMessage = "An agent will help you soon. ";
+        $replyMessage .= "In the mean time, can we have your consent and phone number to contact via WhatsApp in case of trouble? ";
+        $replyMessage .= "Reply with your phone number and the word 'YES' if you want this.";
+
+        if ($containsYes === true && !empty($phoneNumber)) {
+            $subscription = new HsmSubscription($accountId, $service, $authorId, $mention['author']['name'], $phoneNumber);
+            $this->hsmSubscriptions->persist($subscription);
+
+            $replyMessage = "Thanks! We'll keep you posted.";
+        } elseif ($containsYes === true && empty($phoneNumber)) {
+            $replyMessage = "We didn't quite get your phone number. ";
+            $replyMessage .= "Your reply should look like this: ";
+            $replyMessage .= "YES +32 486 00 00 00";
+        }
 
         $result = $this->client->publish(
             $accountId,
@@ -48,7 +81,7 @@ final class WebhooksController
                 $authorId,
             ],
             'Move along',
-            'Hi there!',
+            $replyMessage,
             'queued',
             null,
             $topicId,
