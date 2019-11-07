@@ -64,12 +64,6 @@ Make sure thet automation rule uses the `POST` method and has this body:
 [mention]
 ```
 
-Every time a private message enters the topic, you should see it entering the `logs.txt` file.
-
-```sh
-$ tail -f logs.txt
-```
-
 
 ## Contributing
 
