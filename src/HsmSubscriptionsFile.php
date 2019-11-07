@@ -2,7 +2,6 @@
 
 namespace Demo;
 
-
 final class HsmSubscriptionsFile implements HsmSubscriptions
 {
     private $file;
@@ -38,7 +37,8 @@ final class HsmSubscriptionsFile implements HsmSubscriptions
         $subscriptions = unserialize($content);
 
         foreach ($subscriptions as $subscription) {
-            if ($subscription->getAccountId() == $accountId
+            if (
+                $subscription->getAccountId() == $accountId
                 && $subscription->getService() == $service
                 && $subscription->getServiceId() == $serviceId
             ) {

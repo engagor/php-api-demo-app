@@ -42,5 +42,10 @@ $container->set(Demo\HsmSubscriptions::class, function () {
 
     return new Demo\HsmSubscriptionsFile($file);
 });
+$container->set(Demo\AlreadyContacted::class, function () {
+    $file = __DIR__ . '/../alreadycontacted';
+
+    return new Demo\AlreadyContactedFile($file);
+});
 
 return $container;

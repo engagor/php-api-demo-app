@@ -1,4 +1,5 @@
 <?php
+
 namespace Demo;
 
 final class HsmSubscription
