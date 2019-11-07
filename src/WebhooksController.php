@@ -61,11 +61,8 @@ final class WebhooksController
         }
 
         $contactedAt = $this->alreadyContactedContacts->whenDidWeContact($accountId, $service, $authorId);
-        error_log(print_r($contactedAt, true));
         $twoDaysAgo = new DateTimeImmutable('2 days ago');
         if ($containsYes === false && $contactedAt !== null && $contactedAt > $twoDaysAgo) {
-            error_log(print_r('already contacted', true));
-
             return $response;
         }
 
@@ -83,7 +80,6 @@ final class WebhooksController
             $replyMessage .= 'Your reply should look like this: ';
             $replyMessage .= 'YES +32 486 00 00 00';
         } else {
-            error_log('yoo ben');
             $this->alreadyContactedContacts->weJustContacted($accountId, $service, $authorId);
         }
 
@@ -99,15 +95,13 @@ final class WebhooksController
             [
                 $authorId,
             ],
-            'Move along',
+            'Automated message',
             $replyMessage,
             'queued',
             null,
             $topicId,
             $id
         );
-
-        error_log(print_r($result, true));
 
         return $response;
     }
