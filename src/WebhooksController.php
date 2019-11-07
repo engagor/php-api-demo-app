@@ -37,13 +37,17 @@ final class WebhooksController
         $accountId = preg_replace('/^.*messages\/(\d+)\/.*$/', '$1', $permalink);
         $profileId = preg_replace('/^.*(?:twitter|facebook)\.com\/(\d+)\/.*$/', '$1', $mention['source']['url']);
         $authorId = $mention['author']['id'];
+        $authorName = $mention['author']['name'];
 
         $phoneNumber = preg_replace('/^.*?(\+?[\d\s\(\)\.\-\/]+).*?/', '$1', strip_tags($messageContent));
         $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
 
         try {
             $numberProto = $phoneUtil->parse($phoneNumber, 'BE');
-            $phoneNumber = $phoneUtil->format($numberProto, \libphonenumber\PhoneNumberFormat::E164);
+            $phoneNumber = $phoneUtil->format(
+                $numberProto,
+                \libphonenumber\PhoneNumberFormat::E164
+            );
         } catch (\libphonenumber\NumberParseException $e) {
             $phoneNumber = '';
         }
@@ -60,12 +64,18 @@ final class WebhooksController
             return $response;
         }
 
-        $replyMessage = "Hi {$mention['author']['name']}, an agent will help you soon. ";
+        $replyMessage = "Hi {$authorName}, an agent will help you soon. ";
         $replyMessage .= 'In the mean time, can we have your consent and phone number to contact via WhatsApp in case of trouble? ';
         $replyMessage .= "Reply with your phone number and the word 'YES' if you want this.";
 
         if ($containsYes === true && !empty($phoneNumber)) {
-            $subscription = new HsmSubscription($accountId, $service, $authorId, $mention['author']['name'], $phoneNumber);
+            $subscription = new HsmSubscription(
+                $accountId,
+                $service,
+                $authorId,
+                $authorName,
+                $phoneNumber
+            );
             $this->hsmSubscriptions->persist($subscription);
 
             $replyMessage = "Thanks! We'll keep you posted.";
