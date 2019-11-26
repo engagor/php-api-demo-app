@@ -96,10 +96,8 @@ final class WebhooksController
                     'service_id' => $profileId,
                 ],
             ],
-            [
-                $authorId,
-            ],
-            'Automated message',
+            [],
+            '',
             $replyMessage,
             'queued',
             null,
