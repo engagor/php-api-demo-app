@@ -2,23 +2,23 @@
 
 namespace Demo;
 
+use App\Templates;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 final class TestController
 {
-    public function hello(Request $request, Response $response)
+    private $templates;
+
+    public function __construct(Templates $templates)
     {
-        $html = 'hello';
+        $this->templates = $templates;
+    }
 
-        if ($request->getQueryParams()['token-success']) {
-            $html .= '<p>token success</p>';
-        }
+    public function hello(Request $request, Response $response): Response
+    {
+        $tokenSuccess = isset($request->getQueryParams()['token-success']);
 
-        $html .= '<p><a href="/step1">authenticate</a></p>';
-
-        $response->getBody()->write($html);
-
-        return $response;
+        return $this->templates->renderResponse($response, 'hello.html', ['tokenSuccess' => $tokenSuccess]);
     }
 }

@@ -15,7 +15,7 @@ final class OAuthController
         $this->authentication = $authentication;
     }
 
-    public function step1(Request $request, Response $response)
+    public function step1(Request $request, Response $response): Response
     {
         $url = $this->authentication->step1(
             [
@@ -34,7 +34,7 @@ final class OAuthController
         return $response;
     }
 
-    public function step2(Request $request, Response $response)
+    public function step2(Request $request, Response $response): Response
     {
         $code = $request->getQueryParams()['code'];
         $tokens = $this->authentication->step2($code);

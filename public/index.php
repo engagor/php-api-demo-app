@@ -7,7 +7,7 @@ require __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::create(__DIR__ . '/../');
 $dotenv->load();
 
-$container = require __DIR__ . '/../config/container.php';
+$container = require __DIR__ . '/../app/container.php';
 
 $app = Bridge::create($container);
 

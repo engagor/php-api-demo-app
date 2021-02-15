@@ -23,7 +23,7 @@ final class WebhooksController
         $this->alreadyContactedContacts = $alreadyContactedContacts;
     }
 
-    public function webhooks(Request $request, Response $response)
+    public function webhooks(Request $request, Response $response): Response
     {
         $rawMention = $request->getBody()->getContents();
 
