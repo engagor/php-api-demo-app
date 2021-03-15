@@ -3,6 +3,11 @@ FROM php:7.4-apache
 # Add and enable php extensions
 RUN apt update && apt install -y git
 
+RUN apt-get install -y \
+        libzip-dev \
+        zip \
+  && docker-php-ext-install zip
+
 # Enable apache rewrite engine
 RUN a2enmod rewrite
 
